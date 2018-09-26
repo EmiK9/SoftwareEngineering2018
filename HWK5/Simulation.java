@@ -45,8 +45,14 @@ public class Simulation extends Application{
 		Train train = new Train(track.getEndX()+100,track.getEndY()-25);
 		root.getChildren().add(train.getImageView());
 		
-		for(CrossingGate gate: mapBuilder.getAllGates())
+		RailwayTracks track2 = mapBuilder.getTrack("Peasant");
+		Train train2 = new Train(track2.getStartX()-100,track.getEndY()-25);
+		root.getChildren().add(train.getImageView());
+		
+		for(CrossingGate gate: mapBuilder.getAllGates()) {
 			train.addObserver(gate);
+			train2.addObserver(gate);
+		}
 				
 		// Sets up a repetitive loop i.e., in handle that runs the actual simulation
 		new AnimationTimer(){
@@ -56,12 +62,15 @@ public class Simulation extends Application{
 			
 				createCar();
 				train.move();
+				train2.moveOpp();
 				
 				for(CrossingGate gate: mapBuilder.getAllGates())
 					gate.operateGate();
 				
 				if (train.offScreen())
 					train.reset();
+				if (train2.offScreen())
+					train2.reset();
 						
 				clearCars();				
 			}
